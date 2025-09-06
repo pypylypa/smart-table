@@ -1,8 +1,6 @@
 import "./fonts/ys-display/fonts.css";
 import "./style.css";
 
-import { data as sourceData } from "./data/dataset_1.js";
-
 import { initData } from "./data.js";
 
 import { processFormData } from "./lib/utils.js";
@@ -41,10 +39,10 @@ async function render(action) {
     let state = collectState(); // состояние полей из таблицы
     let query = {}; // копируем для последующего изменения
     // @todo: использование
-    result = applySearching(query, state, action);
-    result = applyFiltering(query, state, action);
-    result = applySorting(query, state, action);
-    result = applyPagination(query, state, action);
+    query = applySearching(query, state, action);
+    query = applyFiltering(query, state, action);
+    query = applySorting(query, state, action);
+    query = applyPagination(query, state, action);
 
     const { total, items } = await api.getRecords(query);
 
