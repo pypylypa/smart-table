@@ -57,14 +57,16 @@ const sampleTable = initTable(
     {
         tableTemplate: "table",
         rowTemplate: "row",
-        before: [],
-        after: [],
+        before: ['search', 'header', 'filter'],
+        after: ['pagination'],
     },
     render
 );
 
 // @todo: инициализация
-const { applyPagination, updatePagination } = initPagination(sampleTable.pagination.elements, (el, page, isCurrent) => {
+const { applyPagination, updatePagination } = initPagination(
+    sampleTable.pagination.elements,
+    (el, page, isCurrent) => {
     const input = el.querySelector("input");
     const label = el.querySelector("span");
     input.value = page;
@@ -73,9 +75,19 @@ const { applyPagination, updatePagination } = initPagination(sampleTable.paginat
     return el;
 });
 
-const applySorting = initSorting([sampleTable.header.elements.sortByDate, sampleTable.header.elements.sortByTotal]);
+const applySorting = initSorting([
+    sampleTable.header.elements.sortByDate,
+    sampleTable.header.elements.sortByTotal
+]);
 
 const { applyFiltering, updateIndexes } = initFiltering(sampleTable.filter.elements, {});
+
+api.getIndexes().then((indexes) => {
+    if (indexes?.sellers) {
+      updateIndexes(sampleTable.filter.elements, { searchBySeller: indexes.sellers });
+    }
+});
+
 const applySearching = initSearching("search");
 const appRoot = document.querySelector("#app");
 appRoot.appendChild(sampleTable.container);
